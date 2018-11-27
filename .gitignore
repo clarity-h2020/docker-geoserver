@@ -8,3 +8,12 @@ resources/overlays/*
 .idea
 btsync-media.env 
 btsync-db.env 
+
+
+!geoserver_data/
+geoserver_data/*
+!postgresql_data/
+postgresql_data/*
+
+db.env
+db-backups.env
