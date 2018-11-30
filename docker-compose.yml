@@ -1,13 +1,17 @@
-version: '3.6'
+version: '2.1'
 
 services:
    postgresql:
       image: kartoza/postgis:9.6-2.4
       container_name: ${COMPOSE_PROJECT_NAME}-postgresql
+      environment:
+        VIRTUAL_HOST: ${VIRTUAL_HOST}
+        LETSENCRYPT_HOST: ${LETSENCRYPT_HOST}
+        LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
+        VIRTUAL_PORT: ${VIRTUAL_PORT}
       volumes:
-      - type: bind
-        source: ./postgresql_data
-        target: /var/lib/postgresql
+      - ./postgresql_data:/var/lib/postgresql
+      - ./postgresql_backups:/backups
       ports:
         - "5432:5432"
       env_file:
@@ -19,9 +23,7 @@ services:
       image: kartoza/geoserver:2.13.0
       container_name: ${COMPOSE_PROJECT_NAME}
       volumes:
-        - type: bind
-        source: ./geoserver_data
-        target: /opt/geoserver/data_dir
+      - ./geoserver_data:/opt/geoserver/data_dir
       ports:
         - "8600:8080"
       restart: on-failure
@@ -40,13 +42,15 @@ services:
      image: kartoza/pg-backup:9.6
      container_name: ${COMPOSE_PROJECT_NAME}-postgresql-backups
      volumes:
-     - type: bind
-       source: ./postgresql_backups
-       target: /backups
+     - ./postgresql_backups:/backups
      env_file:
      - docker-env/db-backups.env
      restart: on-failure
      depends_on:
-       postgresql:
-         condition: service_healthy
+        postgresql:
+          condition: service_healthy
+networks:
+  default:
+    external:
+      name: ${NETWORK:-clarity}
          
