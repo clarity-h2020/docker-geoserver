@@ -3,7 +3,7 @@ version: '2.1'
 services:
    postgresql:
       image: kartoza/postgis:9.6-2.4
-      container_name: ${COMPOSE_PROJECT_NAME}-postgresql
+      container_name: ${COMPOSE_PROJECT_NAME}-postgis
       volumes:
       - ./postgresql_data:/var/lib/postgresql
       - ./postgresql_backups:/backups
@@ -40,7 +40,7 @@ services:
 
    postgresql-dbbackups:
      image: kartoza/pg-backup:9.6
-     container_name: ${COMPOSE_PROJECT_NAME}-postgresql-backups
+     container_name: ${COMPOSE_PROJECT_NAME}-postgis-backups
      volumes:
      - ./postgresql_backups:/backups
      env_file:
