@@ -17,7 +17,7 @@ services:
         test: "exit 0"
    geoserver:
       image: kartoza/geoserver:2.13.0
-      container_name: ${COMPOSE_PROJECT_NAME}-geoserver
+      container_name: ${COMPOSE_PROJECT_NAME}
       volumes:
         - type: bind
         source: ./geoserver_data
